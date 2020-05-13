@@ -27,7 +27,7 @@ local function loadScores()
     end
 
     if ( scoresTable == nil or #scoresTable == 0 ) then
-        scoresTable = { 10000, 7500, 5200, 4700, 3500, 3200, 1200, 1100, 800, 500 }
+        scoresTable = { 5000, 4700, 4000, 3500, 3200, 1200, 1100, 800, 500, 200 }
     end
 end
 
@@ -79,7 +79,7 @@ function scene:create( event )
 		if ( scoresTable[i] ) then
 			local yPos = 150 + ( i * 56 )
 
-			local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX-50, yPos, native.systemFont, 36 )
+			local rankNum = display.newText( sceneGroup, i .. " - ", display.contentCenterX-50, yPos, native.systemFont, 36 )
 			rankNum:setFillColor( 0.8 )
 			rankNum.anchorX = 1
 

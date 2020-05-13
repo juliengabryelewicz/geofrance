@@ -23,6 +23,8 @@ local jsonContent
 local posError
 local msgError
 
+local chooseLocation
+
 
 local function updateText()
 	cityText.text = "Ville: " .. city
@@ -40,7 +42,7 @@ local function addScore(coordx, coordy)
 	print( "absx " .. tostring(absx))
   	print( "absy: " .. tostring(absy) )
   	if (absx + absy < 200) then
-		score = score + math.abs(200 - math.round((absx+absy)/2))
+		score = score + math.abs(300 - math.round((absx+absy)/2))
 	end 
 end
 
@@ -49,15 +51,20 @@ local function endGame()
 	composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
 end
 
+local function disableLocation()
+	background:removeEventListener( "tap", chooseLocation )
+end
 
-local function chooseLocation(event)
+function chooseLocation(event)
 	local coordx = event.x - background.x + background.width*.5
 	local coordy = event.y - background.y + background.height*.5
 	print( "X coordinate: " .. tostring(coordx))
 	print( "Y coordinate: " .. tostring(coordy) )
 	addScore(coordx, coordy)
 	if not jsonContent.cities[index+1] then
-		timer.performWithDelay( 500, endGame )
+		updateText()
+		disableLocation()
+		timer.performWithDelay( 2000, endGame )
 	else
 		index = index + 1
 		getLocation()
@@ -74,10 +81,8 @@ local function updateTime(event)
     if timeText then
     	timeText.text = timeDisplay
 	end
-	if limitTime <= 10 then
-		timeText:setTextColor( 1, 0, 0 )
-	end
 	if limitTime == 0 then
+		disableLocation()
 		timer.performWithDelay( 2000, endGame )
 	end
 end
@@ -113,7 +118,7 @@ function scene:create( event )
 	-- Display cities and score
 	timeText = display.newText( uiGroup, "01:00", 200, 80, native.systemFont, 36 )
 	scoreText = display.newText( uiGroup, "Score: " .. score, 400, 80, native.systemFont, 36 )
-	cityText = display.newText( uiGroup, "Ville: " .. city, 200, 160, native.systemFont, 36 )
+	cityText = display.newText( uiGroup, "Ville: " .. city, display.contentCenterX, 160, native.systemFont, 36 )
 
 	background = display.newImageRect( backGroup, "assets/image_france.png", 500, 500 )
 	background.x = display.contentCenterX
